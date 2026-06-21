@@ -399,11 +399,17 @@ $app->get('/image/{id}.{ext}', function (Request $request, Response $response, $
         return $response;
     }
 
-    $post = $this->get('helper')->fetch_first('SELECT * FROM `posts` WHERE `id` = ?', $args['id']);
+    $post = $this->get('helper')->fetch_first('SELECT `mime`, `imgdata` FROM `posts` WHERE `id` = ?', $args['id']);
 
     if (($args['ext'] == 'jpg' && $post['mime'] == 'image/jpeg') ||
         ($args['ext'] == 'png' && $post['mime'] == 'image/png') ||
         ($args['ext'] == 'gif' && $post['mime'] == 'image/gif')) {
+        $image_path = "/home/public/image/{$args['id']}.{$args['ext']}";
+        if (!is_dir(dirname($image_path))) {
+            mkdir(dirname($image_path), 0755, true);
+        }
+        file_put_contents($image_path, $post['imgdata']);
+        
         $response->getBody()->write($post['imgdata']);
         return $response->withHeader('Content-Type', $post['mime']);
     }
