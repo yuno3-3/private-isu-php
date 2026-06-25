@@ -5,6 +5,11 @@
 - pass: true
 - fail: 0
 
+## 実行環境
+
+- Docker Composeを使用してローカル環境で実行した。
+- MySQL/nginx/memcachedもdocker composeで起動した。
+
 ## 変更点
 
 1. PHP実装で起動できるようにDocker/nginx設定を調整
